@@ -1,0 +1,98 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Car {
+public:
+    int id;
+    std::string brand;
+    std::string model;
+    bool isRented;
+    double pricePerDay;
+
+    Car(int carId, std::string carBrand, std::string carModel, double price) {
+        id = carId;
+        brand = carBrand;
+        model = carModel;
+        pricePerDay = price;
+        isRented = false;
+    }
+
+    void displayInfo() {
+        std::cout << "ID: " << id
+                  << ", Brand: " << brand
+                  << ", Model: " << model
+                  << ", Price per day: $" << pricePerDay
+                  << ", Status: " << (isRented ? "Rented" : "Available") 
+                  << std::endl;
+    }
+};
+
+void displayCars(std::vector<Car>& cars) {
+    for (auto& car : cars) {
+        car.displayInfo();
+    }
+}
+
+void rentCar(std::vector<Car>& cars) {
+    int id;
+    std::cout << "Enter Car ID to rent: ";
+    std::cin >> id;
+    for (auto& car : cars) {
+        if (car.id == id) {
+            if (!car.isRented) {
+                car.isRented = true;
+                std::cout << "Car rented successfully!\n";
+            } else {
+                std::cout << "Sorry, this car is already rented.\n";
+            }
+            return;
+        }
+    }
+    std::cout << "Car not found.\n";
+}
+
+void returnCar(std::vector<Car>& cars) {
+    int id;
+    std::cout << "Enter Car ID to return: ";
+    std::cin >> id;
+    for (auto& car : cars) {
+        if (car.id == id) {
+            if (car.isRented) {
+                car.isRented = false;
+                std::cout << "Car returned successfully!\n";
+            } else {
+                std::cout << "This car was not rented.\n";
+            }
+            return;
+        }
+    }
+    std::cout << "Car not found.\n";
+}
+
+int main() {
+    std::vector<Car> cars = {
+        Car(1, "Toyota", "Corolla", 50),
+        Car(2, "Honda", "Civic", 55),
+        Car(3, "Ford", "Mustang", 100),
+        Car(4, "BMW", "X5", 150),
+        Car(5, "Audi", "A4", 120)
+    };
+
+    int choice;
+    do {
+        std::cout << "\n===== Car Rental System =====\n";
+        std::cout << "1. Display all cars\n2. Rent a car\n3. Return a car\n4. Exit\n";
+        std::cout << "Enter choice: ";
+        std::cin >> choice;
+        switch (choice) {
+            case 1: displayCars(cars); break;
+            case 2: rentCar(cars); break;
+            case 3: returnCar(cars); break;
+            case 4: std::cout << "Exiting...\n"; break;
+            default: std::cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
